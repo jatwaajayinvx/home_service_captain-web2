@@ -1,0 +1,374 @@
+<div class="container py-4">
+
+  <!-- Loading -->
+  @if (loading) {
+
+    <div class="text-center py-5">
+
+      <div
+        class="spinner-border text-primary"
+        role="status"
+      >
+        <span class="visually-hidden">
+          Loading...
+        </span>
+      </div>
+
+      <p class="text-muted mt-3 mb-0">
+        Loading booking...
+      </p>
+
+    </div>
+
+  }
+
+  <!-- Error -->
+  @else if (errorMessage) {
+
+    <div
+      class="alert alert-danger"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
+
+  }
+
+  <!-- Booking -->
+  @else if (booking; as b) {
+
+    <!-- Status Header -->
+    <div class="card border-0 shadow-sm mb-4">
+
+      <div class="card-body text-center">
+
+        @if (b.status === 'SEARCHING') {
+
+          <div class="status-icon searching">
+            <i class="bi bi-search"></i>
+          </div>
+
+        }
+        @else if (b.status === 'COMPLETED') {
+
+          <div class="status-icon completed">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+
+        }
+        @else if (b.status === 'CANCELLED') {
+
+          <div class="status-icon cancelled">
+            <i class="bi bi-x-circle-fill"></i>
+          </div>
+
+        }
+        @else {
+
+          <div class="status-icon">
+            <i class="bi bi-tools"></i>
+          </div>
+
+        }
+
+        <h4 class="fw-bold mt-3 mb-2">
+          {{ getStatusTitle() }}
+        </h4>
+
+        <p class="text-muted mb-1">
+          Booking #{{ b.booking_number }}
+        </p>
+
+        <span class="badge bg-primary">
+          {{ b.status }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- Captain Card -->
+    @if (b.captain_id) {
+
+      <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+          <h5 class="fw-bold mb-3">
+            Your Captain
+          </h5>
+
+          <div class="d-flex align-items-center gap-3">
+
+            <!-- Avatar -->
+            <div class="captain-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+
+            <!-- Information -->
+            <div class="flex-grow-1">
+
+              <h5 class="mb-1 fw-bold">
+                {{ b.captain_name || 'Captain' }}
+              </h5>
+
+              <div class="text-muted small">
+
+                <span>
+                  <i class="bi bi-star-fill text-warning"></i>
+                  {{ b.captain_rating || 0 }}
+                </span>
+
+                <span class="ms-3">
+                  <i class="bi bi-tools"></i>
+                  {{ b.captain_experience || 0 }}
+                  years experience
+                </span>
+
+              </div>
+
+            </div>
+
+            <!-- Call -->
+            @if (b.captain_mobile; as mobile) {
+
+              <a
+                [href]="'tel:' + mobile"
+                class="btn btn-outline-primary rounded-circle call-button"
+                aria-label="Call Captain"
+                title="Call Captain"
+              >
+                <i class="bi bi-telephone"></i>
+              </a>
+
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- Booking Progress -->
+    @if (b.status !== 'CANCELLED') {
+
+      <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+          <h5 class="fw-bold mb-4">
+            Booking Progress
+          </h5>
+
+
+          <!-- Finding Captain -->
+          <div
+            class="timeline-item"
+            [class.active]="isStatusActive('SEARCHING')"
+          >
+
+            <div class="timeline-icon">
+              <i class="bi bi-search"></i>
+            </div>
+
+            <div>
+              <strong>Finding Captain</strong>
+
+              @if (b.status === 'SEARCHING') {
+                <div class="small text-muted">
+                  Looking for a nearby Captain
+                </div>
+              }
+
+            </div>
+
+          </div>
+
+
+          <!-- Captain Assigned -->
+          <div
+            class="timeline-item"
+            [class.active]="isStatusActive('ACCEPTED')"
+          >
+
+            <div class="timeline-icon">
+              <i class="bi bi-person-check"></i>
+            </div>
+
+            <div>
+              <strong>Captain Assigned</strong>
+            </div>
+
+          </div>
+
+
+          <!-- On The Way -->
+          <div
+            class="timeline-item"
+            [class.active]="isStatusActive('ON_THE_WAY')"
+          >
+
+            <div class="timeline-icon">
+              <i class="bi bi-car-front"></i>
+            </div>
+
+            <div>
+              <strong>On The Way</strong>
+            </div>
+
+          </div>
+
+
+          <!-- Arrived -->
+          <div
+            class="timeline-item"
+            [class.active]="isStatusActive('ARRIVED')"
+          >
+
+            <div class="timeline-icon">
+              <i class="bi bi-geo-alt"></i>
+            </div>
+
+            <div>
+              <strong>Captain Arrived</strong>
+            </div>
+
+          </div>
+
+
+          <!-- Started -->
+          <div
+            class="timeline-item"
+            [class.active]="isStatusActive('STARTED')"
+          >
+
+            <div class="timeline-icon">
+              <i class="bi bi-tools"></i>
+            </div>
+
+            <div>
+              <strong>Service Started</strong>
+            </div>
+
+          </div>
+
+
+          <!-- Completed -->
+          <div
+            class="timeline-item"
+            [class.active]="isStatusActive('COMPLETED')"
+          >
+
+            <div class="timeline-icon">
+              <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+              <strong>Completed</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- Amount -->
+    <div class="card border-0 shadow-sm mb-4">
+
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between">
+
+          <span class="text-muted">
+            Estimated Amount
+          </span>
+
+          <strong class="fs-5">
+            ₹{{ b.estimated_amount }}
+          </strong>
+
+        </div>
+
+        @if (b.final_amount) {
+
+          <hr>
+
+          <div class="d-flex justify-content-between">
+
+            <span class="text-muted">
+              Final Amount
+            </span>
+
+            <strong class="fs-5 text-success">
+              ₹{{ b.final_amount }}
+            </strong>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- Payment -->
+    @if (b.status === 'COMPLETED') {
+
+      <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body text-center">
+
+          <i
+            class="bi bi-credit-card fs-1 text-primary"
+          ></i>
+
+          <h5 class="fw-bold mt-3">
+            Complete Your Payment
+          </h5>
+
+          <p class="text-muted">
+            Your service has been completed.
+            Please proceed with payment.
+          </p>
+
+          <button
+            type="button"
+            class="btn btn-primary btn-lg px-5"
+            [routerLink]="['/payment', b.id]"
+          >
+            <i class="bi bi-credit-card me-2"></i>
+            Proceed to Payment
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- Cancelled -->
+    @if (b.status === 'CANCELLED') {
+
+      <div class="alert alert-danger">
+
+        <i class="bi bi-exclamation-circle me-2"></i>
+
+        This booking has been cancelled.
+
+      </div>
+
+    }
+
+  }
+
+</div>

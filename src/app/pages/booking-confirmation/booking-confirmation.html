@@ -1,0 +1,102 @@
+<div class="container py-4">
+
+  <button
+    class="btn btn-light mb-3"
+    (click)="goBack()"
+  >
+    <i class="bi bi-arrow-left"></i>
+    Back
+  </button>
+
+  <h3 class="fw-bold mb-4">
+    Confirm Booking
+  </h3>
+
+  @if (errorMessage) {
+    <div class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (bookingData) {
+
+    <div class="card border-0 shadow-sm">
+
+      <div class="card-body">
+
+        <h5 class="fw-bold mb-4">
+          Booking Summary
+        </h5>
+
+        <div class="summary-row">
+          <span>Service</span>
+          <strong>
+            Service #{{ bookingData.serviceId }}
+          </strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Problem</span>
+          <strong>
+            {{ bookingData.problemDescription }}
+          </strong>
+        </div>
+
+        @if (bookingData.scheduledDate) {
+          <div class="summary-row">
+            <span>Date</span>
+            <strong>
+              {{ bookingData.scheduledDate }}
+            </strong>
+          </div>
+        }
+
+        @if (bookingData.scheduledTime) {
+          <div class="summary-row">
+            <span>Time</span>
+            <strong>
+              {{ bookingData.scheduledTime }}
+            </strong>
+          </div>
+        }
+
+        <div class="summary-row">
+          <span>Address</span>
+          <strong>
+            Address #{{ bookingData.addressId }}
+          </strong>
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-between fs-5">
+          <span>Estimated Amount</span>
+
+          <strong class="text-primary">
+            Will be calculated by server
+          </strong>
+        </div>
+
+        <button
+          class="btn btn-primary w-100 mt-4"
+          [disabled]="submitting"
+          (click)="confirmBooking()"
+        >
+
+          @if (submitting) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Creating Booking...
+          } @else {
+            <i class="bi bi-check-circle me-1"></i>
+            Confirm Booking
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>  

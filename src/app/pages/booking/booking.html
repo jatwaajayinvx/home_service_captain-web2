@@ -1,0 +1,119 @@
+<div class="container py-4">
+
+  <div class="mb-4">
+
+    <button
+      class="btn btn-light mb-3"
+      (click)="goBack()"
+    >
+      <i class="bi bi-arrow-left"></i>
+      Back
+    </button>
+
+    <h3 class="fw-bold">
+      Booking Details
+    </h3>
+
+  </div>
+
+  @if (loading) {
+
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+  } @else if (!service) {
+
+    <div class="alert alert-danger">
+      Service not found.
+    </div>
+
+  } @else {
+
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+
+        <h5 class="fw-bold mb-1">
+          {{ service.name }}
+        </h5>
+
+        <p class="text-muted mb-2">
+          {{ service.description }}
+        </p>
+
+        <div class="d-flex justify-content-between">
+          <span>
+            <i class="bi bi-clock"></i>
+            {{ service.estimated_minutes }} mins
+          </span>
+
+          <strong class="text-primary">
+            ₹{{ service.base_price }}
+          </strong>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+
+        <form (ngSubmit)="continue()">
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              What's the problem?
+            </label>
+
+            <textarea
+              class="form-control"
+              rows="4"
+              [(ngModel)]="problemDescription"
+              name="problemDescription"
+              placeholder="Describe your problem..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Preferred Date
+            </label>
+
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="scheduledDate"
+              name="scheduledDate"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Preferred Time
+            </label>
+
+            <input
+              type="time"
+              class="form-control"
+              [(ngModel)]="scheduledTime"
+              name="scheduledTime"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+          >
+            Continue
+            <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+
+        </form>
+
+      </div>
+    </div>
+
+  }
+
+</div>

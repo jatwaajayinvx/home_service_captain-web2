@@ -1,0 +1,66 @@
+<div class="container py-4">
+
+  <div class="mb-4">
+    <h3 class="fw-bold">Hello 👋</h3>
+    <p class="text-muted mb-0">
+      What service do you need today?
+    </p>
+  </div>
+
+  <div class="input-group mb-4">
+    <span class="input-group-text bg-white">
+      <i class="bi bi-search"></i>
+    </span>
+
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search for a service..."
+    />
+  </div>
+
+  <h5 class="fw-bold mb-3">Services</h5>
+
+  @if (loading()) {
+
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+  } @else {
+
+    <div class="row g-3">
+
+      @for (category of categories(); track category.id) {
+
+        <div class="col-6 col-md-4"  (click)="selectCategory(category)">
+
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-3">
+
+              <div class="service-icon mb-2">
+                <i class="bi bi-tools fs-2 text-primary"></i>
+              </div>
+
+              <h6 class="fw-semibold mb-1">
+                {{ category.name }}
+              </h6>
+
+              @if (category.description) {
+                <small class="text-muted">
+                  {{ category.description }}
+                </small>
+              }
+
+            </div>
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</div>

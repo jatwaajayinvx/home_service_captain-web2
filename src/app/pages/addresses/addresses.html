@@ -1,0 +1,110 @@
+<div class="container py-4">
+
+  <button
+    class="btn btn-light mb-3"
+    (click)="goBack()"
+  >
+    <i class="bi bi-arrow-left"></i>
+    Back
+  </button>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold mb-1">Select Address</h3>
+      <p class="text-muted mb-0">
+        Where should the Captain visit?
+      </p>
+    </div>
+
+    <button class="btn btn-outline-primary">
+      <i class="bi bi-plus-lg"></i>
+      Add
+    </button>
+  </div>
+
+  @if (loading) {
+
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+  } @else if (addresses.length === 0) {
+
+    <div class="alert alert-info">
+      No saved addresses found. Please add an address.
+    </div>
+
+  } @else {
+
+    @for (address of addresses; track address.id) {
+
+      <div
+        class="card border-0 shadow-sm mb-3 address-card"
+        [class.selected]="selectedAddressId === address.id"
+        (click)="selectAddress(address)"
+      >
+
+        <div class="card-body">
+
+          <div class="d-flex align-items-start">
+
+            <div class="address-icon me-3">
+              @if (address.address_type === 'OFFICE') {
+                <i class="bi bi-building"></i>
+              } @else {
+                <i class="bi bi-house"></i>
+              }
+            </div>
+
+            <div class="flex-grow-1">
+
+              <div class="d-flex justify-content-between">
+
+                <h6 class="fw-bold mb-1">
+                  {{ address.address_type || 'Address' }}
+                </h6>
+
+                @if (selectedAddressId === address.id) {
+                  <i class="bi bi-check-circle-fill text-primary"></i>
+                }
+
+              </div>
+
+              <p class="mb-1">
+                {{ address.address_line }}
+              </p>
+
+              @if (address.landmark) {
+                <small class="text-muted">
+                  {{ address.landmark }}
+                </small>
+              }
+
+              <div class="text-muted small mt-1">
+                {{ address.city }},
+                {{ address.state }} -
+                {{ address.pincode }}
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+    <button
+      class="btn btn-primary w-100 mt-3"
+      [disabled]="!selectedAddressId"
+      (click)="continue()"
+    >
+      Continue
+      <i class="bi bi-arrow-right ms-1"></i>
+    </button>
+
+  }
+
+</div>

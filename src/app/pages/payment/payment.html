@@ -1,0 +1,234 @@
+<div class="container py-4">
+
+  @if (loading) {
+
+    <div class="text-center py-5">
+
+      <div
+        class="spinner-border text-primary"
+        role="status"
+      >
+        <span class="visually-hidden">
+          Loading...
+        </span>
+      </div>
+
+      <p class="text-muted mt-3">
+        Loading payment details...
+      </p>
+
+    </div>
+
+  }
+
+  @else if (errorMessage && !booking) {
+
+    <div class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+  }
+
+  @else if (booking; as b) {
+
+    <!-- Header -->
+    <div class="mb-4">
+
+      <h3 class="fw-bold mb-1">
+        Complete Payment
+      </h3>
+
+      <p class="text-muted mb-0">
+        Booking #{{ b.booking_number }}
+      </p>
+
+    </div>
+
+
+    <!-- Amount Card -->
+    <div class="card border-0 shadow-sm mb-4">
+
+      <div class="card-body text-center py-4">
+
+        <div class="text-muted mb-2">
+          Total Amount
+        </div>
+
+        <div class="display-5 fw-bold text-primary">
+          ₹{{ getAmount() }}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Payment Methods -->
+    <div class="card border-0 shadow-sm mb-4">
+
+      <div class="card-body">
+
+        <h5 class="fw-bold mb-3">
+          Select Payment Method
+        </h5>
+
+
+        <!-- Cash -->
+        <button
+          type="button"
+          class="payment-method"
+          [class.selected]="selectedMethod === 'CASH'"
+          (click)="selectMethod('CASH')"
+        >
+
+          <div class="method-icon">
+            <i class="bi bi-cash-stack"></i>
+          </div>
+
+          <div class="method-content">
+
+            <strong>
+              Cash
+            </strong>
+
+            <small>
+              Pay directly to Captain
+            </small>
+
+          </div>
+
+          @if (selectedMethod === 'CASH') {
+
+            <i class="bi bi-check-circle-fill text-primary"></i>
+
+          }
+
+        </button>
+
+
+        <!-- UPI -->
+        <button
+          type="button"
+          class="payment-method"
+          [class.selected]="selectedMethod === 'UPI'"
+          (click)="selectMethod('UPI')"
+        >
+
+          <div class="method-icon">
+            <i class="bi bi-phone"></i>
+          </div>
+
+          <div class="method-content">
+
+            <strong>
+              UPI
+            </strong>
+
+            <small>
+              Pay using UPI
+            </small>
+
+          </div>
+
+          @if (selectedMethod === 'UPI') {
+
+            <i class="bi bi-check-circle-fill text-primary"></i>
+
+          }
+
+        </button>
+
+
+        <!-- Card -->
+        <button
+          type="button"
+          class="payment-method"
+          [class.selected]="selectedMethod === 'CARD'"
+          (click)="selectMethod('CARD')"
+        >
+
+          <div class="method-icon">
+            <i class="bi bi-credit-card"></i>
+          </div>
+
+          <div class="method-content">
+
+            <strong>
+              Card
+            </strong>
+
+            <small>
+              Credit / Debit Card
+            </small>
+
+          </div>
+
+          @if (selectedMethod === 'CARD') {
+
+            <i class="bi bi-check-circle-fill text-primary"></i>
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- Error -->
+    @if (errorMessage) {
+
+      <div
+        class="alert alert-danger"
+        role="alert"
+      >
+        {{ errorMessage }}
+      </div>
+
+    }
+
+
+    <!-- Pay Button -->
+    <div class="d-grid">
+
+      <button
+        type="button"
+        class="btn btn-primary btn-lg"
+        [disabled]="paying"
+        (click)="payNow()"
+      >
+
+        @if (paying) {
+
+          <span
+            class="spinner-border spinner-border-sm me-2"
+          ></span>
+
+          Processing...
+
+        }
+        @else {
+
+          <i class="bi bi-lock-fill me-2"></i>
+
+          Pay ₹{{ getAmount() }}
+
+        }
+
+      </button>
+
+    </div>
+
+
+    <p class="text-center text-muted small mt-3">
+
+      <i class="bi bi-shield-check me-1"></i>
+
+      Your payment information is secure.
+
+    </p>
+
+  }
+
+</div>
